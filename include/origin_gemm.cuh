@@ -6,7 +6,7 @@
 
 __global__ void origin_gemm_thread(int M, int N, int K, int *A, int *B, int *C);
 
-void origin_gemm(args arg ,int *A, int *B, int *C);
+int* origin_gemm(args arg ,int *A, int *B, int *C);
 
 
 #endif
