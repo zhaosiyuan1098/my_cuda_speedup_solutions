@@ -1,3 +1,6 @@
+#ifndef ARGS_H
+#define ARGS_H
+
 class args {
 public:
     const int M;
@@ -9,3 +12,5 @@ public:
     int block_size;
     args(int M=2048, int K=2048, int N=2048, int bk=128, int rk=8);
 };
+
+#endif

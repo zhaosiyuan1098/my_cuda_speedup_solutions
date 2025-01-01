@@ -4,13 +4,11 @@
 #include <stdio.h>
 #include <iostream>
 
-#include"args.h"
+#include "args.h"
+#include "origin_gemm.cuh"
 
 
-__global__ void origin_gemm_thread(){
-    // printf can be used instead of std::cout in device code
-    printf("Hello from origin_gemm!\n");
-}
+
 
 
 void init_matrix(args arg, int **A, int **B, int **C){
@@ -49,10 +47,7 @@ void init_matrix(args arg, int **A, int **B, int **C){
     std::cout<<"matrix intialized!"<<std::endl;
 }
 
-void origin_gemm(args arg ,int *A, int *B, int *C){
-    origin_gemm_thread<<<1, 16>>>();
-    cudaDeviceSynchronize();
-}
+
 
 int main(){
     args arg;
@@ -60,9 +55,6 @@ int main(){
     init_matrix(arg, &A, &B, &C);
     origin_gemm(arg, A, B, C);
      
-
-    // 调用内核函数
-    
 
     // 释放内存
     cudaFree(A);
