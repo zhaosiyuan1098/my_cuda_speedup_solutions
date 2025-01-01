@@ -2,7 +2,9 @@ add_rules("mode.debug", "mode.release")
 
 target("my_cuda_speedup_solutions")
     set_kind("binary")
+    add_includedirs("include")
     add_files("src/*.cu")
+    add_files("src/*.cpp")
 
     -- generate SASS code for SM architecture of current host
     add_cugencodes("native")
