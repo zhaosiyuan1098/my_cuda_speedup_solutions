@@ -1,17 +1,15 @@
-#ifndef V2_CUH
-#define V2_CUH
+#ifndef V3_CUH
+#define V3_CUH
 
 #include "cuda_runtime.h"
 #include "args.h"
 #include "utils.h"
 
-//使用共享内存block_A和block_B存放矩阵块
 
+//避免条件分化+省寄存器
 
-__global__ void v2_kernel(args arg, float *A, float *B, float *C)
+__global__ void v3_kernel(args arg, float *A, float *B, float *C)
 {
-
-    //每个线程用来计算C的一个元素
     int tx = threadIdx.x, ty = threadIdx.y;
     int bx = blockIdx.x, by = blockIdx.y;
     int row = bx * blockDim.x + tx;
@@ -19,20 +17,16 @@ __global__ void v2_kernel(args arg, float *A, float *B, float *C)
     __shared__ float block_A[arg.block_size][arg.block_size];
     __shared__ float block_B[arg.block_size][arg.block_size];
     float temp = 0.0;
-    //依次把block_size*block_size的A和B矩阵块加载到共享内存中
-    for (int i = 0; i < (arg.K + arg.block_size - 1) / arg.block_size; i++) {
-        if (row < arg.M && (i * arg.block_size + tx) < arg.K)
-            block_A[ty][tx] = A[row * arg.K + i * arg.block_size + tx];
-        else
-            block_A[ty][tx] = 0.0;
 
-        if (col < arg.N && (i * arg.block_size + ty) < arg.K)
-            block_B[ty][tx] = B[(i * arg.block_size + ty) * arg.N + col];
-        else
-            block_B[ty][tx] = 0.0;
+    for (int i = 0; i < (arg.K + arg.block_size - 1) / arg.block_size; i++) {
+        int tiledRow = i * arg.block_size + tx;
+        int tiledCol = i * arg.block_size + ty;
+
+        block_A[ty][tx] = (row < arg.M && tiledRow < arg.K) ? A[row * arg.K + tiledRow] : 0.0;
+        block_B[ty][tx] = (col < arg.N && tiledCol < arg.K) ? B[tiledCol * arg.N + col] : 0.0;
 
         __syncthreads();
-        //计算C的一个元素的一部分
+
         for (int k = 0; k < arg.block_size; k++) {
             temp += block_A[ty][k] * block_B[k][tx];
         }
@@ -44,15 +38,14 @@ __global__ void v2_kernel(args arg, float *A, float *B, float *C)
     }
 }
 
-float *v2(args arg, float *A, float *B, float *C)
+
+float *v3(args arg, float *A, float *B, float *C)
 {
     dim3 threadsPerBlock(arg.block_size, arg.block_size);
     dim3 numBlocks((arg.N + threadsPerBlock.x - 1) / threadsPerBlock.x,
                    (arg.M + threadsPerBlock.y - 1) / threadsPerBlock.y);
 
-    v2_kernel<<<numBlocks, threadsPerBlock>>>(arg, A, B, C);
+    v3_kernel<<<numBlocks, threadsPerBlock>>>(arg, A, B, C);
     cudaDeviceSynchronize();
     return C;
 }
-
-#endif

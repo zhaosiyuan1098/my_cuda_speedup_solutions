@@ -16,7 +16,6 @@ xmake
 
 ### gemm
     
-* 使用共享内存加速
 * 使用寄存器加速
 * 避免bank confict
 
