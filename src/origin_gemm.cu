@@ -19,7 +19,7 @@ __global__ void origin_gemm_thread(int M, int N, int K, int *A, int *B, int *C)
 
 int* origin_gemm(args arg, int *A, int *B, int *C)
 {
-    dim3 threadsPerBlock(arg.block_size, arg.block_size);
+    dim3 threadsPerBlock(arg.M/arg.bk, arg.M/arg.bk);
     dim3 numBlocks((arg.N + threadsPerBlock.x - 1) / threadsPerBlock.x,
                    (arg.M + threadsPerBlock.y - 1) / threadsPerBlock.y);
     std::cout << "numBlocks: " << numBlocks.x << " " << numBlocks.y << std::endl;
