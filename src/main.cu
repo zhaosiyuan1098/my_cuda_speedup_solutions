@@ -27,16 +27,17 @@ void init_matrix(args arg, float **A, float **B, float **C) {
         std::cerr << "cudaMallocManaged failed for C: " << cudaGetErrorString(err) << std::endl;
         return;
     }
+    srand(time(NULL));
     for (int i = 0; i < M * K; i++) {
-        (*A)[i] = static_cast<float>(i);
+        (*A)[i] = static_cast<float>(rand()) / RAND_MAX;
     }
     for (int i = 0; i < K * N; i++) {
-        (*B)[i] = static_cast<float>(i);
+        (*B)[i] = static_cast<float>(rand()) / RAND_MAX;
     }
     for (int i = 0; i < M * N; i++) {
         (*C)[i] = 0.0f;
     }
-    std::cout << "matrix initialized!" << std::endl;
+    std::cout << "matrix initialized with random values!" << std::endl;
 }
 
 int main() {
