@@ -16,11 +16,14 @@ __global__ void v1_kernel(args arg, float *A, float *B, float *C)
     int row = bx * blockDim.x + tx;
     int col = by * blockDim.y + ty;
     float temp = 0.0;
-    for (int k_count = 0; k_count < arg.K; k_count++)
+    if (row < arg.M && col < arg.N) // 添加边界检查
     {
-        temp += A[row * arg.K + k_count] * B[k_count * arg.N + col];
+        for (int k_count = 0; k_count < arg.K; k_count++)
+        {
+            temp += A[row * arg.K + k_count] * B[k_count * arg.N + col];
+        }
+        C[row * arg.N + col] = temp;
     }
-    C[row * arg.N + col] = temp;
 }
 
 float *v1(args arg, float *A, float *B, float *C)
