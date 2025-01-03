@@ -12,6 +12,13 @@ cd ./my_cuda_speedup_solutions
 xmake 
 ```
 
+### gemm
+* v1:最原始的实现
+* v2:使用分块矩阵+共享内存
+* v3:减少寄存器使用
+* v4:内存对齐
+
+
 ## todolist
 
 ### gemm

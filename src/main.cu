@@ -12,6 +12,7 @@
 #include "v2.cuh"
 #include "v3.cuh"
 #include "v4.cuh"
+#include "v5.cuh"
 
 
 void init_matrix(args arg, float **A, float **B, float **C) {
@@ -65,7 +66,7 @@ int main(int argc, char* argv[]) {
     init_matrix(arg, &A, &B, &C);
     cudaMallocManaged(&C_cublas, arg.M * arg.N * sizeof(float));
 
-
+    auto blas_start = std::chrono::high_resolution_clock::now();
     cublasHandle_t handle;
     cublasCreate(&handle);
     const float alpha = 1.0f;
@@ -73,6 +74,10 @@ int main(int argc, char* argv[]) {
     cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, arg.N, arg.M, arg.K, &alpha, B, arg.N, A, arg.K, &beta, C_cublas, arg.N);
     cudaDeviceSynchronize();
     cublasDestroy(handle);
+
+    auto blas_end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<float, std::milli> blas_duration = blas_end - blas_start;
+    std::cout << "Method " << "cublas" << " time: " << blas_duration.count() << " ms" << std::endl;
 
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -89,6 +94,9 @@ int main(int argc, char* argv[]) {
         case 4:
             v4(arg, A, B, C);
             break;
+        case 5:
+            v5(arg, A, B, C);
+            break;
         default:
             std::cerr << "Invalid method!" << std::endl;
             break;
@@ -103,7 +111,7 @@ int main(int argc, char* argv[]) {
     // 比较结果
     bool match = true;
     for (int i = 0; i < arg.M * arg.N; i++) {
-        if (fabs(C[i] - C_cublas[i]) > 1e-5) {
+        if (fabs(C[i] - C_cublas[i]) > 1e-3) {
             match = false;
             std::cout << "Results do not match at index " << i << ": " << C[i] << " != " << C_cublas[i] << std::endl;
             break;

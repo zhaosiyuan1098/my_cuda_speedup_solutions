@@ -6,6 +6,7 @@
 #include "utils.h"
 
 // block_B 矩阵以转置方式存储，于循环计算中顺序读取
+//但由于出现了bank_conflict,实际执行效率不如v3
 
 __global__ void v4_kernel(args arg, float *A, float *B, float *C)
 {
@@ -23,19 +24,8 @@ __global__ void v4_kernel(args arg, float *A, float *B, float *C)
         int tiledRow = i * arg.block_size + tx;
         int tiledCol = i * arg.block_size + ty;
 
-        // 加载 A 的小块
-        if (row < arg.M && tiledRow < arg.K) {
-            block_A[ty * arg.block_size + tx] = A[row * arg.K + tiledRow];
-        } else {
-            block_A[ty * arg.block_size + tx] = 0.0f;
-        }
-
-        // 加载 B 的转置小块
-        if (col < arg.N && tiledCol < arg.K) {
-            block_B[tx * arg.block_size + ty] = B[tiledCol * arg.N + col];
-        } else {
-            block_B[tx * arg.block_size + ty] = 0.0f;
-        }
+        block_A[ty * arg.block_size + tx] = (row < arg.M && tiledRow < arg.K) ? A[row * arg.K + tiledRow] : 0.0f;
+        block_B[tx * arg.block_size + ty] = (col < arg.N && tiledCol < arg.K) ? B[tiledCol * arg.N + col] : 0.0f;
 
         __syncthreads();
 

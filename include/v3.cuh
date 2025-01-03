@@ -5,7 +5,7 @@
 #include "args.h"
 #include "utils.h"
 
-//避免条件分化+省寄存器
+// 避免条件分化+省寄存器
 
 __global__ void v3_kernel(args arg, float *A, float *B, float *C)
 {
@@ -13,28 +13,38 @@ __global__ void v3_kernel(args arg, float *A, float *B, float *C)
     float *block_A = shared_mem;
     float *block_B = shared_mem + arg.block_size * arg.block_size;
 
+    // 每个线程用来计算C的一个元素
     int tx = threadIdx.x, ty = threadIdx.y;
     // int bx = blockIdx.x, by = blockIdx.y;
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
     float temp = 0.0;
+    // 依次把block_size*block_size的A和B矩阵块加载到共享内存中
+    for (int i = 0; i < (arg.K + arg.block_size - 1) / arg.block_size; i++)
+    {
+        if (row < arg.M && (i * arg.block_size + tx) < arg.K)
+            //(row, iblock_size + tx)
+            block_A[ty * arg.block_size + tx] = A[row * arg.K + i * arg.block_size + tx];
+        else
+            block_A[ty * arg.block_size + tx] = 0.0;
 
-    for (int i = 0; i < (arg.K + arg.block_size - 1) / arg.block_size; i++) {
-        int tiledRow = i * arg.block_size + tx;
-        int tiledCol = i * arg.block_size + ty;
-
-        block_A[ty * arg.block_size + tx] = (row < arg.M && tiledRow < arg.K) ? A[row * arg.K + tiledRow] : 0.0;
-        block_B[ty * arg.block_size + tx] = (col < arg.N && tiledCol < arg.K) ? B[tiledCol * arg.N + col] : 0.0;
+        if (col < arg.N && (i * arg.block_size + ty) < arg.K)
+            //(iblock_size + ty, col)
+            block_B[ty * arg.block_size + tx] = B[(i * arg.block_size + ty) * arg.N + col];
+        else
+            block_B[ty * arg.block_size + tx] = 0.0;
 
         __syncthreads();
-
-        for (int k = 0; k < arg.block_size; k++) {
+        // 计算C的一个元素的一部分
+        for (int k = 0; k < arg.block_size; k++)
+        {
             temp += block_A[ty * arg.block_size + k] * block_B[k * arg.block_size + tx];
         }
         __syncthreads();
     }
 
-    if (row < arg.M && col < arg.N) {
+    if (row < arg.M && col < arg.N)
+    {
         C[row * arg.N + col] = temp;
     }
 }
