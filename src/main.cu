@@ -47,7 +47,6 @@ void init_matrix(args arg, float **A, float **B, float **C) {
     for (int i = 0; i < M * N; i++) {
         (*C)[i] = 0.0f;
     }
-    std::cout << "matrix initialized with random values!" << std::endl;
 }
 
 int main(int argc, char* argv[]) {
@@ -66,16 +65,18 @@ int main(int argc, char* argv[]) {
     init_matrix(arg, &A, &B, &C);
     cudaMallocManaged(&C_cublas, arg.M * arg.N * sizeof(float));
 
-    auto blas_start = std::chrono::high_resolution_clock::now();
+    
     cublasHandle_t handle;
     cublasCreate(&handle);
     const float alpha = 1.0f;
     const float beta = 0.0f;
+    auto blas_start = std::chrono::high_resolution_clock::now();
     cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, arg.N, arg.M, arg.K, &alpha, B, arg.N, A, arg.K, &beta, C_cublas, arg.N);
     cudaDeviceSynchronize();
+    auto blas_end = std::chrono::high_resolution_clock::now();
     cublasDestroy(handle);
 
-    auto blas_end = std::chrono::high_resolution_clock::now();
+    std::cout<< "matrix size: " << arg.M  << std::endl;
     std::chrono::duration<float, std::milli> blas_duration = blas_end - blas_start;
     std::cout << "Method " << "cublas" << " time: " << blas_duration.count() << " ms" << std::endl;
 
@@ -123,6 +124,7 @@ int main(int argc, char* argv[]) {
     } else {
         std::cout << "Results do not match!" << std::endl;
     }
+    std::cout << std::endl;
     
 
     // 释放内存

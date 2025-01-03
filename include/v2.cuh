@@ -23,8 +23,8 @@ __global__ void v2_kernel(args arg, float *A, float *B, float *C)
 
     for (int i = 0; i < (arg.K + arg.block_size - 1) / arg.block_size; i++)
     {
-        int tiledRow = i * arg.block_size + tx;
-        int tiledCol = i * arg.block_size + ty;
+        register int tiledRow = i * arg.block_size + tx;
+        register int tiledCol = i * arg.block_size + ty;
 
         if (row < arg.M && tiledRow < arg.K)
             block_A[ty * arg.block_size + tx] = A[row * arg.K + tiledRow];
