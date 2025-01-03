@@ -3,12 +3,12 @@
 
 class args {
 public:
-    const int M=2048;
-    const int K=2048;
-    const int N=2048;
-    const int bk=128;
-    const int rk=8;
-    const int block_size=32;
+    int M=64;
+    int K=64;
+    int N=64;
+    int bk=128;
+    int rk=8;
+    int block_size=32;
 };
 
 #endif

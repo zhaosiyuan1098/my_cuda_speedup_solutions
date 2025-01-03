@@ -12,6 +12,9 @@ target("my_cuda_speedup_solutions")
     -- generate PTX code for the virtual architecture to guarantee compatibility
     add_cugencodes("compute_70")
 
+
+    add_links("cublas")
+    add_linkdirs("/usr/local/cuda/lib64")
     -- -- generate SASS code for each SM architecture
     -- add_cugencodes("sm_35", "sm_37", "sm_50", "sm_52", "sm_60", "sm_61", "sm_70", "sm_75")
 

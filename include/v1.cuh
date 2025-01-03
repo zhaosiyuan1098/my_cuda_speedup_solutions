@@ -31,6 +31,7 @@ float *v1(args arg, float *A, float *B, float *C)
 
     v1_kernel<<<numBlocks, threadsPerBlock>>>(arg, A, B, C);
     cudaDeviceSynchronize();
+    return C;
 }
 
 #endif
