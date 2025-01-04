@@ -13,6 +13,7 @@
 #include "v3.cuh"
 #include "v4.cuh"
 #include "v5.cuh"
+#include "v6.cuh"
 
 
 void init_matrix(args arg, float **A, float **B, float **C) {
@@ -64,8 +65,8 @@ int main(int argc, char* argv[]) {
     float *A, *B, *C, *C_cublas;
     init_matrix(arg, &A, &B, &C);
     cudaMallocManaged(&C_cublas, arg.M * arg.N * sizeof(float));
-
-    
+    std::cout<< "matrix size: " << arg.M  << std::endl;
+#ifdef USE_CUBLAS
     cublasHandle_t handle;
     cublasCreate(&handle);
     const float alpha = 1.0f;
@@ -76,10 +77,9 @@ int main(int argc, char* argv[]) {
     auto blas_end = std::chrono::high_resolution_clock::now();
     cublasDestroy(handle);
 
-    std::cout<< "matrix size: " << arg.M  << std::endl;
     std::chrono::duration<float, std::milli> blas_duration = blas_end - blas_start;
     std::cout << "Method " << "cublas" << " time: " << blas_duration.count() << " ms" << std::endl;
-
+#endif
     auto start = std::chrono::high_resolution_clock::now();
 
     switch (method) {
@@ -97,6 +97,9 @@ int main(int argc, char* argv[]) {
             break;
         case 5:
             v5(arg, A, B, C);
+            break;
+        case 6:
+            v6(arg, A, B, C);
             break;
         default:
             std::cerr << "Invalid method!" << std::endl;

@@ -3,6 +3,7 @@ add_rules("mode.debug", "mode.release")
 target("my_cuda_speedup_solutions")
     set_kind("binary")
     add_includedirs("include")
+    add_includedirs("/usr/local/cuda/include")
     add_files("src/*.cu")
     -- add_files("src/*.cpp")
 
@@ -15,6 +16,7 @@ target("my_cuda_speedup_solutions")
 
     add_links("cublas")
     add_linkdirs("/usr/local/cuda/lib64")
+    add_defines("USE_CUBLAS")
     -- -- generate SASS code for each SM architecture
     -- add_cugencodes("sm_35", "sm_37", "sm_50", "sm_52", "sm_60", "sm_61", "sm_70", "sm_75")
 
