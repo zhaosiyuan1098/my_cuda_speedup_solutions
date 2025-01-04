@@ -14,6 +14,7 @@
 #include "v4.cuh"
 #include "v5.cuh"
 #include "v6.cuh"
+#include"v7.cuh"
 
 
 void init_matrix(args arg, float **A, float **B, float **C) {
@@ -100,6 +101,9 @@ int main(int argc, char* argv[]) {
             break;
         case 6:
             v6(arg, A, B, C);
+            break;
+        case 7:
+            v7(arg, A, B, C);
             break;
         default:
             std::cerr << "Invalid method!" << std::endl;
