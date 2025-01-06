@@ -14,45 +14,54 @@
 #include "v4.cuh"
 #include "v5.cuh"
 #include "v6.cuh"
-#include"v7.cuh"
+#include "v7.cuh"
+#include "v8.cuh"
 
-
-void init_matrix(args arg, float **A, float **B, float **C) {
+void init_matrix(args arg, float **A, float **B, float **C)
+{
     int M = arg.M;
     int K = arg.K;
     int N = arg.N;
     cudaError_t err;
-    err = cudaMallocManaged((void**)&(*A), M * K * sizeof(float));
-    if (err != cudaSuccess) {
+    err = cudaMallocManaged((void **)&(*A), M * K * sizeof(float));
+    if (err != cudaSuccess)
+    {
         std::cerr << "cudaMallocManaged failed for A: " << cudaGetErrorString(err) << std::endl;
         return;
     }
 
-    err = cudaMallocManaged((void**)&(*B), K * N * sizeof(float));
-    if (err != cudaSuccess) {
+    err = cudaMallocManaged((void **)&(*B), K * N * sizeof(float));
+    if (err != cudaSuccess)
+    {
         std::cerr << "cudaMallocManaged failed for B: " << cudaGetErrorString(err) << std::endl;
         return;
     }
 
-    err = cudaMallocManaged((void**)&(*C), M * N * sizeof(float));
-    if (err != cudaSuccess) {
+    err = cudaMallocManaged((void **)&(*C), M * N * sizeof(float));
+    if (err != cudaSuccess)
+    {
         std::cerr << "cudaMallocManaged failed for C: " << cudaGetErrorString(err) << std::endl;
         return;
     }
     srand(time(NULL));
-    for (int i = 0; i < M * K; i++) {
+    for (int i = 0; i < M * K; i++)
+    {
         (*A)[i] = static_cast<float>(rand()) / RAND_MAX;
     }
-    for (int i = 0; i < K * N; i++) {
+    for (int i = 0; i < K * N; i++)
+    {
         (*B)[i] = static_cast<float>(rand()) / RAND_MAX;
     }
-    for (int i = 0; i < M * N; i++) {
+    for (int i = 0; i < M * N; i++)
+    {
         (*C)[i] = 0.0f;
     }
 }
 
-int main(int argc, char* argv[]) {
-    if (argc != 3) {
+int main(int argc, char *argv[])
+{
+    if (argc != 3)
+    {
         std::cerr << "Usage: " << argv[0] << " <MNK> <method>" << std::endl;
         return -1;
     }
@@ -66,7 +75,7 @@ int main(int argc, char* argv[]) {
     float *A, *B, *C, *C_cublas;
     init_matrix(arg, &A, &B, &C);
     cudaMallocManaged(&C_cublas, arg.M * arg.N * sizeof(float));
-    std::cout<< "matrix size: " << arg.M  << std::endl;
+    std::cout << "matrix size: " << arg.M << std::endl;
 #ifdef USE_CUBLAS
     cublasHandle_t handle;
     cublasCreate(&handle);
@@ -83,31 +92,35 @@ int main(int argc, char* argv[]) {
 #endif
     auto start = std::chrono::high_resolution_clock::now();
 
-    switch (method) {
-        case 1:
-            v1(arg, A, B, C);
-            break;
-        case 2:
-            v2(arg, A, B, C);
-            break;
-        case 3:
-            v3(arg, A, B, C);
-            break;
-        case 4:
-            v4(arg, A, B, C);
-            break;
-        case 5:
-            v5(arg, A, B, C);
-            break;
-        case 6:
-            v6(arg, A, B, C);
-            break;
-        case 7:
-            v7(arg, A, B, C);
-            break;
-        default:
-            std::cerr << "Invalid method!" << std::endl;
-            break;
+    switch (method)
+    {
+    case 1:
+        v1(arg, A, B, C);
+        break;
+    case 2:
+        v2(arg, A, B, C);
+        break;
+    case 3:
+        v3(arg, A, B, C);
+        break;
+    case 4:
+        v4(arg, A, B, C);
+        break;
+    case 5:
+        v5(arg, A, B, C);
+        break;
+    case 6:
+        v6(arg, A, B, C);
+        break;
+    case 7:
+        v7(arg, A, B, C);
+        break;
+    case 8:
+        v8(arg, A, B, C);
+        break;
+    default:
+        std::cerr << "Invalid method!" << std::endl;
+        break;
     }
 
     cudaDeviceSynchronize();
@@ -115,24 +128,27 @@ int main(int argc, char* argv[]) {
     std::chrono::duration<float, std::milli> duration = end - start;
     std::cout << "Method " << method << " time: " << duration.count() << " ms" << std::endl;
 
-    
     // 比较结果
     bool match = true;
-    for (int i = 0; i < arg.M * arg.N; i++) {
-        if (fabs(C[i] - C_cublas[i]) > 1e-3) {
+    for (int i = 0; i < arg.M * arg.N; i++)
+    {
+        if (fabs(C[i] - C_cublas[i]) > 1e-3)
+        {
             match = false;
             std::cout << "Results do not match at index " << i << ": " << C[i] << " != " << C_cublas[i] << std::endl;
             break;
         }
     }
 
-    if (match) {
+    if (match)
+    {
         std::cout << "Results match!" << std::endl;
-    } else {
+    }
+    else
+    {
         std::cout << "Results do not match!" << std::endl;
     }
     std::cout << std::endl;
-    
 
     // 释放内存
     cudaFree(A);

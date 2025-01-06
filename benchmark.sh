@@ -9,7 +9,7 @@ matrix_sizes=(32 64 100 128 256 500 512 1024 1500 2048 2560 3000 3479 4096 4667 
 # 遍历每个矩阵大小
 for size in ${matrix_sizes[@]}; do
     # 遍历每个方法（0-4）
-    for method in $(seq 1 7); do
+    for method in $(seq 1 8); do
         echo "Running matrix multiplication for size $size with method $method" >> result.txt
         xmake run my_cuda_speedup_solutions $size $method >> result.txt
     done

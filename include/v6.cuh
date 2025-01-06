@@ -1,6 +1,8 @@
 #ifndef V6_CUH
 #define V6_CUH
 
+
+
 #include "cuda_runtime.h"
 #include "args.h"
 #include "utils.h"
@@ -34,7 +36,7 @@ __global__ void v6_kernel(args arg, float *A, float *B, float *C)
     __syncthreads();
 
     // 主计算循环
-    #pragma unroll 4
+    #pragma unroll 
     for (int i = 0; i < (arg.K + arg.block_size - 1) / arg.block_size; i++)
     {
         // 预加载下一块数据到另一个缓冲区
@@ -57,7 +59,7 @@ __global__ void v6_kernel(args arg, float *A, float *B, float *C)
         }
 
         // 计算当前块
-        #pragma unroll 8
+        #pragma unroll 
         for (int k = 0; k < arg.block_size && (i * arg.block_size + k) < arg.K; k++)
         {
             temp += block_A[current][ty * arg.block_size + k] * 
