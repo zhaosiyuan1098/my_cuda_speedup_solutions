@@ -18,38 +18,42 @@ __global__ void v7_kernel(args arg, float *A, float *B, float *C)
     int bx = blockIdx.x, by = blockIdx.y;
     int tx = threadIdx.x, ty = threadIdx.y;
     
-    // 计算全局和局部索引
-    int row = by * BLOCK_SIZE + ty;
-    int col = bx * BLOCK_SIZE + tx;
+    // 修正：计算正确的全局索引
+    int row_start = by * BLOCK_SIZE;
+    int col_start = bx * BLOCK_SIZE;
     
     float acc[THREAD_SIZE_Y][THREAD_SIZE_X] = {0.0f};
     
-    // 主循环，处理所有K维度的块
-    for (int k = 0; k < (arg.K + BLOCK_SIZE - 1) / BLOCK_SIZE; k++) {
-        // 协作加载A和B到共享内存
+    for (int k = 0; k < arg.K; k += BLOCK_SIZE) 
+    {
+        // 修正：正确加载数据到共享内存
         #pragma unroll
-        for (int i = 0; i < BLOCK_SIZE; i += 8) {
-            for (int j = 0; j < BLOCK_SIZE; j += 8) {
-                if (row + i < arg.M && k * BLOCK_SIZE + j < arg.K)
-                    block_A[(ty + i) * BLOCK_SIZE + tx + j] = 
-                        A[(row + i) * arg.K + k * BLOCK_SIZE + j];
-                if (k * BLOCK_SIZE + i < arg.K && col + j < arg.N)
-                    block_B[(ty + i) * BLOCK_SIZE + tx + j] = 
-                        B[(k * BLOCK_SIZE + i) * arg.N + col + j];
+        for (int i = 0; i < THREAD_SIZE_Y; i++) {
+            for (int j = 0; j < THREAD_SIZE_X; j++) {
+                int global_row = row_start + ty * THREAD_SIZE_Y + i;
+                int global_col = k + tx * THREAD_SIZE_X + j;
+                if (global_row < arg.M && global_col < arg.K)
+                    block_A[(ty * THREAD_SIZE_Y + i) * BLOCK_SIZE + tx * THREAD_SIZE_X + j] = 
+                        A[global_row * arg.K + global_col];
+                
+                global_row = k + ty * THREAD_SIZE_Y + i;
+                global_col = col_start + tx * THREAD_SIZE_X + j;
+                if (global_row < arg.K && global_col < arg.N)
+                    block_B[(ty * THREAD_SIZE_Y + i) * BLOCK_SIZE + tx * THREAD_SIZE_X + j] = 
+                        B[global_row * arg.N + global_col];
             }
         }
         
         __syncthreads();
         
-        // 计算当前块的乘积
-        #pragma unroll
-        for (int k_sub = 0; k_sub < BLOCK_SIZE; k_sub++) {
+        // 修正：正确计算矩阵乘法
+        for (int kk = 0; kk < BLOCK_SIZE; kk++) {
             #pragma unroll
             for (int i = 0; i < THREAD_SIZE_Y; i++) {
                 #pragma unroll
                 for (int j = 0; j < THREAD_SIZE_X; j++) {
-                    acc[i][j] += block_A[(ty * THREAD_SIZE_Y + i) * BLOCK_SIZE + k_sub] * 
-                                block_B[k_sub * BLOCK_SIZE + tx * THREAD_SIZE_X + j];
+                    acc[i][j] += block_A[(ty * THREAD_SIZE_Y + i) * BLOCK_SIZE + kk] * 
+                                block_B[kk * BLOCK_SIZE + tx * THREAD_SIZE_X + j];
                 }
             }
         }
@@ -57,13 +61,14 @@ __global__ void v7_kernel(args arg, float *A, float *B, float *C)
         __syncthreads();
     }
     
-    // 写回结果
+    // 修正：正确写回结果
     #pragma unroll
     for (int i = 0; i < THREAD_SIZE_Y; i++) {
-        #pragma unroll
         for (int j = 0; j < THREAD_SIZE_X; j++) {
-            if (row + i < arg.M && col + j < arg.N) {
-                C[(row + i) * arg.N + col + j] = acc[i][j];
+            int global_row = row_start + ty * THREAD_SIZE_Y + i;
+            int global_col = col_start + tx * THREAD_SIZE_X + j;
+            if (global_row < arg.M && global_col < arg.N) {
+                C[global_row * arg.N + global_col] = acc[i][j];
             }
         }
     }

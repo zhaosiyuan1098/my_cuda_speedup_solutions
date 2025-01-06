@@ -22,13 +22,6 @@ target("my_cuda_speedup_solutions")
 
     -- -- generate PTX code from the highest SM architecture to guarantee forward-compatibility
     -- add_cugencodes("compute_75")
-target("test")
-    set_kind("binary")
-    add_includedirs("include")
-    add_files("scripts/*.cu")
-    add_links("cublas")
-    add_linkdirs("/usr/local/cuda/lib64")
-    add_defines("USE_CUBLAS")
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
 --

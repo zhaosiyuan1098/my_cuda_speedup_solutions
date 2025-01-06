@@ -1,425 +1,186 @@
 Running matrix multiplication for size 32 with method 1
 matrix size: 32
-Method cublas time: 4.01668 ms
-Method 1 time: 0.17097 ms
+Method cublas time: 5.88106 ms
+Method 1 time: 0.184041 ms
 Results match!
-
 Running matrix multiplication for size 32 with method 2
 matrix size: 32
-Method cublas time: 7.40023 ms
-Method 2 time: 0.261202 ms
+Method cublas time: 4.5717 ms
+Method 2 time: 0.125421 ms
 Results match!
-
 Running matrix multiplication for size 32 with method 3
 matrix size: 32
-Method cublas time: 3.98823 ms
-Method 3 time: 0.151561 ms
+Method cublas time: 3.93217 ms
+Method 3 time: 0.144291 ms
 Results match!
-
 Running matrix multiplication for size 32 with method 4
 matrix size: 32
-Method cublas time: 11.8842 ms
-Method 4 time: 0.438108 ms
+Method cublas time: 4.12068 ms
+Method 4 time: 0.138316 ms
 Results match!
-
 Running matrix multiplication for size 32 with method 5
 matrix size: 32
-Method cublas time: 3.94338 ms
-Method 5 time: 0.159493 ms
+Method cublas time: 4.22133 ms
+Method 5 time: 0.113603 ms
 Results match!
-
 Running matrix multiplication for size 32 with method 6
 matrix size: 32
-Method cublas time: 4.04802 ms
-Method 6 time: 0.16009 ms
+Method cublas time: 4.10869 ms
+Method 6 time: 0.118264 ms
 Results match!
-
 Running matrix multiplication for size 32 with method 7
 matrix size: 32
-Method cublas time: 4.05869 ms
-Method 7 time: 0.268376 ms
-Results do not match at index 0: 8.07934 != 6.66087
-Results do not match!
-
+Method cublas time: 4.01382 ms
+Method 7 time: 0.141298 ms
+Results match!
 Running matrix multiplication for size 32 with method 8
 matrix size: 32
-Method cublas time: 6.8555 ms
-Method 8 time: 0.267263 ms
-Results do not match at index 0: 7.81405 != 6.66087
+Method cublas time: 13.0087 ms
+Method 8 time: 0.321016 ms
+Results match!
+Running matrix multiplication for size 32 with method 9
+matrix size: 32
+Method cublas time: 9.25724 ms
+Method 9 time: 4.06608 ms
+error.  7.54, 0.00,0
 Results do not match!
-
 Running matrix multiplication for size 64 with method 1
 matrix size: 64
-Method cublas time: 6.8337 ms
-Method 1 time: 0.360768 ms
+Method cublas time: 4.20016 ms
+Method 1 time: 0.160616 ms
 Results match!
-
 Running matrix multiplication for size 64 with method 2
 matrix size: 64
-Method cublas time: 6.8763 ms
-Method 2 time: 0.310026 ms
+Method cublas time: 4.14847 ms
+Method 2 time: 0.121482 ms
 Results match!
-
 Running matrix multiplication for size 64 with method 3
 matrix size: 64
-Method cublas time: 6.91658 ms
-Method 3 time: 0.318888 ms
+Method cublas time: 10.0397 ms
+Method 3 time: 0.262458 ms
 Results match!
-
 Running matrix multiplication for size 64 with method 4
 matrix size: 64
-Method cublas time: 11.2883 ms
-Method 4 time: 0.432648 ms
+Method cublas time: 10.0392 ms
+Method 4 time: 0.294935 ms
 Results match!
-
 Running matrix multiplication for size 64 with method 5
 matrix size: 64
-Method cublas time: 11.525 ms
-Method 5 time: 0.408924 ms
+Method cublas time: 9.23785 ms
+Method 5 time: 0.212295 ms
 Results match!
-
 Running matrix multiplication for size 64 with method 6
 matrix size: 64
-Method cublas time: 14.7552 ms
-Method 6 time: 0.527083 ms
+Method cublas time: 9.45921 ms
+Method 6 time: 0.282918 ms
 Results match!
-
 Running matrix multiplication for size 64 with method 7
 matrix size: 64
-Method cublas time: 14.4491 ms
-Method 7 time: 0.792713 ms
-Results do not match at index 0: 23.7337 != 17.4499
-Results do not match!
-
+Method cublas time: 10.2748 ms
+Method 7 time: 0.278264 ms
+Results match!
 Running matrix multiplication for size 64 with method 8
 matrix size: 64
-Method cublas time: 4.08724 ms
-Method 8 time: 0.200116 ms
-Results do not match at index 0: 16.4631 != 17.4499
+Method cublas time: 8.87396 ms
+Method 8 time: 0.233143 ms
+Results match!
+Running matrix multiplication for size 64 with method 9
+matrix size: 64
+Method cublas time: 6.02476 ms
+Method 9 time: 3.86931 ms
+error. 15.73, 0.00,0
 Results do not match!
-
 Running matrix multiplication for size 100 with method 1
 matrix size: 100
-Method cublas time: 7.33827 ms
-Method 1 time: 0.325407 ms
+Method cublas time: 5.94627 ms
+Method 1 time: 0.222413 ms
 Results match!
-
 Running matrix multiplication for size 100 with method 2
 matrix size: 100
-Method cublas time: 7.35143 ms
-Method 2 time: 0.310076 ms
+Method cublas time: 4.32588 ms
+Method 2 time: 0.136577 ms
 Results match!
-
 Running matrix multiplication for size 100 with method 3
 matrix size: 100
-Method cublas time: 7.27255 ms
-Method 3 time: 0.309292 ms
+Method cublas time: 4.33708 ms
+Method 3 time: 0.131601 ms
 Results match!
-
 Running matrix multiplication for size 100 with method 4
 matrix size: 100
-Method cublas time: 10.1514 ms
-Method 4 time: 0.527946 ms
+Method cublas time: 8.16079 ms
+Method 4 time: 0.383887 ms
 Results match!
-
 Running matrix multiplication for size 100 with method 5
 matrix size: 100
-Method cublas time: 8.93934 ms
-Method 5 time: 0.277333 ms
+Method cublas time: 5.52417 ms
+Method 5 time: 0.185122 ms
 Results match!
-
 Running matrix multiplication for size 100 with method 6
 matrix size: 100
-Method cublas time: 7.44131 ms
-Method 6 time: 0.304287 ms
+Method cublas time: 5.54796 ms
+Method 6 time: 0.1728 ms
 Results match!
-
 Running matrix multiplication for size 100 with method 7
 matrix size: 100
-Method cublas time: 7.32295 ms
-Method 7 time: 0.42826 ms
-Results do not match at index 0: 28.948 != 26.9072
+Method cublas time: 5.39815 ms
+Method 7 time: 0.193015 ms
+error. 25.15,34.11,0
 Results do not match!
-
 Running matrix multiplication for size 100 with method 8
 matrix size: 100
-Method cublas time: 9.61796 ms
-Method 8 time: 0.518637 ms
-Results do not match at index 0: 24.3619 != 26.9072
+Method cublas time: 5.32429 ms
+Method 8 time: 0.149425 ms
+Results match!
+Running matrix multiplication for size 100 with method 9
+matrix size: 100
+Method cublas time: 5.3741 ms
+Method 9 time: 6.33837 ms
+error. 25.07, 0.00,0
 Results do not match!
-
 Running matrix multiplication for size 128 with method 1
 matrix size: 128
-Method cublas time: 15.102 ms
-Method 1 time: 0.66278 ms
+Method cublas time: 5.59179 ms
+Method 1 time: 0.340101 ms
 Results match!
-
 Running matrix multiplication for size 128 with method 2
 matrix size: 128
-Method cublas time: 7.54431 ms
-Method 2 time: 0.330148 ms
+Method cublas time: 16.6615 ms
+Method 2 time: 0.507347 ms
 Results match!
-
 Running matrix multiplication for size 128 with method 3
 matrix size: 128
-Method cublas time: 7.65864 ms
-Method 3 time: 0.292812 ms
+Method cublas time: 6.39687 ms
+Method 3 time: 0.222669 ms
 Results match!
-
 Running matrix multiplication for size 128 with method 4
 matrix size: 128
-Method cublas time: 7.68318 ms
-Method 4 time: 0.464233 ms
+Method cublas time: 15.9573 ms
+Method 4 time: 0.593395 ms
 Results match!
-
 Running matrix multiplication for size 128 with method 5
 matrix size: 128
-Method cublas time: 7.58416 ms
-Method 5 time: 0.31629 ms
+Method cublas time: 8.98435 ms
+Method 5 time: 0.234471 ms
 Results match!
-
 Running matrix multiplication for size 128 with method 6
 matrix size: 128
-Method cublas time: 9.50154 ms
-Method 6 time: 0.359186 ms
+Method cublas time: 9.0467 ms
+Method 6 time: 0.249934 ms
 Results match!
-
 Running matrix multiplication for size 128 with method 7
 matrix size: 128
-Method cublas time: 13.8903 ms
-Method 7 time: 0.745276 ms
-Results do not match at index 0: 41.9362 != 32.9271
-Results do not match!
-
+Method cublas time: 8.99456 ms
+Method 7 time: 0.286588 ms
+Results match!
 Running matrix multiplication for size 128 with method 8
 matrix size: 128
-Method cublas time: 15.4132 ms
-Method 8 time: 0.603612 ms
-Results do not match at index 0: 29.4209 != 30.8111
+Method cublas time: 8.77036 ms
+Method 8 time: 0.225753 ms
+Results match!
+Running matrix multiplication for size 128 with method 9
+matrix size: 128
+Method cublas time: 10.2447 ms
+Method 9 time: 10.7951 ms
+error. 34.44, 0.00,0
 Results do not match!
-
 Running matrix multiplication for size 256 with method 1
-matrix size: 256
-Method cublas time: 12.9052 ms
-Method 1 time: 1.72392 ms
-Results match!
-
-Running matrix multiplication for size 256 with method 2
-matrix size: 256
-Method cublas time: 13.1387 ms
-Method 2 time: 0.270718 ms
-Results match!
-
-Running matrix multiplication for size 256 with method 3
-matrix size: 256
-Method cublas time: 13.2703 ms
-Method 3 time: 0.265303 ms
-Results match!
-
-Running matrix multiplication for size 256 with method 4
-matrix size: 256
-Method cublas time: 12.9649 ms
-Method 4 time: 1.73868 ms
-Results match!
-
-Running matrix multiplication for size 256 with method 5
-matrix size: 256
-Method cublas time: 12.8476 ms
-Method 5 time: 0.306252 ms
-Results match!
-
-Running matrix multiplication for size 256 with method 6
-matrix size: 256
-Method cublas time: 7.15965 ms
-Method 6 time: 0.416901 ms
-Results match!
-
-Running matrix multiplication for size 256 with method 7
-matrix size: 256
-Method cublas time: 7.04784 ms
-Method 7 time: 0.279514 ms
-Results do not match at index 0: 56.1754 != 60.6013
-Results do not match!
-
-Running matrix multiplication for size 256 with method 8
-matrix size: 256
-Method cublas time: 7.21404 ms
-Method 8 time: 1.72136 ms
-Results do not match at index 0: 65.3886 != 60.6013
-Results do not match!
-
-Running matrix multiplication for size 500 with method 1
-matrix size: 500
-Method cublas time: 4.99555 ms
-Method 1 time: 5.21868 ms
-Results match!
-
-Running matrix multiplication for size 500 with method 2
-matrix size: 500
-Method cublas time: 5.11488 ms
-Method 2 time: 1.47922 ms
-Results match!
-
-Running matrix multiplication for size 500 with method 3
-matrix size: 500
-Method cublas time: 5.095 ms
-Method 3 time: 1.46815 ms
-Results match!
-
-Running matrix multiplication for size 500 with method 4
-matrix size: 500
-Method cublas time: 5.00948 ms
-Method 4 time: 12.8664 ms
-Results match!
-
-Running matrix multiplication for size 500 with method 5
-matrix size: 500
-Method cublas time: 5.58193 ms
-Method 5 time: 1.47052 ms
-Results match!
-
-Running matrix multiplication for size 500 with method 6
-matrix size: 500
-Method cublas time: 15.6087 ms
-Method 6 time: 3.69466 ms
-Results match!
-
-Running matrix multiplication for size 500 with method 7
-matrix size: 500
-Method cublas time: 8.82543 ms
-Method 7 time: 1.25894 ms
-Results do not match at index 0: 121.201 != 123.658
-Results do not match!
-
-Running matrix multiplication for size 500 with method 8
-matrix size: 500
-Method cublas time: 6.08716 ms
-Method 8 time: 13.8552 ms
-Results do not match at index 0: 122.233 != 123.658
-Results do not match!
-
-Running matrix multiplication for size 512 with method 1
-matrix size: 512
-Method cublas time: 4.98862 ms
-Method 1 time: 13.1312 ms
-Results match!
-
-Running matrix multiplication for size 512 with method 2
-matrix size: 512
-Method cublas time: 4.85319 ms
-Method 2 time: 1.44833 ms
-Results match!
-
-Running matrix multiplication for size 512 with method 3
-matrix size: 512
-Method cublas time: 5.09222 ms
-Method 3 time: 1.46 ms
-Results match!
-
-Running matrix multiplication for size 512 with method 4
-matrix size: 512
-Method cublas time: 5.20566 ms
-Method 4 time: 13.4547 ms
-Results match!
-
-Running matrix multiplication for size 512 with method 5
-matrix size: 512
-Method cublas time: 5.01509 ms
-Method 5 time: 1.45298 ms
-Results match!
-
-Running matrix multiplication for size 512 with method 6
-matrix size: 512
-Method cublas time: 5.02472 ms
-Method 6 time: 3.10993 ms
-Results match!
-
-Running matrix multiplication for size 512 with method 7
-matrix size: 512
-Method cublas time: 4.96715 ms
-Method 7 time: 0.973866 ms
-Results do not match at index 0: 137.908 != 133.882
-Results do not match!
-
-Running matrix multiplication for size 512 with method 8
-matrix size: 512
-Method cublas time: 4.84751 ms
-Method 8 time: 13.7912 ms
-Results do not match at index 0: 128.999 != 133.882
-Results do not match!
-
-Running matrix multiplication for size 1024 with method 1
-matrix size: 1024
-Method cublas time: 9.51259 ms
-Method 1 time: 100.444 ms
-Results match!
-
-Running matrix multiplication for size 1024 with method 2
-matrix size: 1024
-Method cublas time: 10.0348 ms
-Method 2 time: 8.49154 ms
-Results match!
-
-Running matrix multiplication for size 1024 with method 3
-matrix size: 1024
-Method cublas time: 11.5666 ms
-Method 3 time: 8.36125 ms
-Results match!
-
-Running matrix multiplication for size 1024 with method 4
-matrix size: 1024
-Method cublas time: 8.60324 ms
-Method 4 time: 84.1818 ms
-Results match!
-
-Running matrix multiplication for size 1024 with method 5
-matrix size: 1024
-Method cublas time: 9.70662 ms
-Method 5 time: 8.28952 ms
-Results match!
-
-Running matrix multiplication for size 1024 with method 6
-matrix size: 1024
-Method cublas time: 8.81603 ms
-Method 6 time: 17.7048 ms
-Results match!
-
-Running matrix multiplication for size 1024 with method 7
-matrix size: 1024
-Method cublas time: 9.12456 ms
-Method 7 time: 3.78787 ms
-Results do not match at index 0: 257.279 != 245.343
-Results do not match!
-
-Running matrix multiplication for size 1024 with method 8
-matrix size: 1024
-Method cublas time: 9.38802 ms
-Method 8 time: 84.7472 ms
-Results do not match at index 0: 262.102 != 245.343
-Results do not match!
-
-Running matrix multiplication for size 1500 with method 1
-matrix size: 1500
-Method cublas time: 17.0938 ms
-Method 1 time: 102.11 ms
-Results match!
-
-Running matrix multiplication for size 1500 with method 2
-matrix size: 1500
-Method cublas time: 17.5656 ms
-Method 2 time: 22.1547 ms
-Results match!
-
-Running matrix multiplication for size 1500 with method 3
-matrix size: 1500
-Method cublas time: 13.0073 ms
-Method 3 time: 21.1636 ms
-Results match!
-
-Running matrix multiplication for size 1500 with method 4
-matrix size: 1500
-Method cublas time: 12.6276 ms
-Method 4 time: 239.118 ms
-Results match!
-
-Running matrix multiplication for size 1500 with method 5

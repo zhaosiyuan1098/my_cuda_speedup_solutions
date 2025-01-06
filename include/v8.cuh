@@ -1,67 +1,86 @@
-#ifndef V8_CUH
-#define V8_CUH
+#ifndef V8_OPTIMIZED_CUH
+#define V8_OPTIMIZED_CUH
 
 #include "cuda_runtime.h"
-#include "args.h"  // 包含参数定义
-#include "utils.h" // 包含辅助工具函数
+#include "args.h"
+#include "utils.h"
 
-#define A(x, y) A[(x) + (y) * N]
-#define B(x, y) B[(x) + (y) * N]
-#define C(x, y) C[(x) + (y) * N]
-#define block_A(x, y) block_A[(x)* block_size + (y) ]
-#define block_B(x, y) block_B[(x)* block_size + (y) ]
+// Simplified macros for indexing
+#define A(i, j) A[(i) + (j) * lda]
+#define B(i, j) B[(i) + (j) * ldb]
+#define C(i, j) C[(i) + (j) * ldc]
+#define sa(i, j) sa[(i) * block_size + (j)]
+#define sb(i, j) sb[(i) * block_size + (j)]
 
-__global__ void v8_kernel(int N, int block_size, float *A, float *B, float *C)
+__global__ void v8_kernel(int N, int block_size, float *A, float *B, float *C, int lda, int ldb, int ldc)
 {
-    int tx = threadIdx.x;
-    int ty = threadIdx.y;
-    int bx = blockIdx.x;
-    int by = blockIdx.y;
+    // Thread and block indices
+    int tx = threadIdx.x, ty = threadIdx.y;
+    int bx = blockIdx.x, by = blockIdx.y;
 
+    // Coordinates in C
+    int row = by * block_size + ty;
+    int col = bx * block_size + tx;
+
+    // Shared memory for submatrices
     extern __shared__ float shared_mem[];
-    float *block_A = shared_mem;
-    float *block_B = shared_mem + block_size * block_size;
+    float *sa = shared_mem;                                // Shared A block
+    float *sb = shared_mem + block_size * block_size;      // Shared B block
 
-    A = &A(bx * block_size, 0);
-    B = &B(0, by * block_size);
-    C = &C(bx * block_size, by * block_size);
+    // Temporary accumulator for the result
+    float temp = 0.0f;
 
-    float sum = 0.0f;
+    // Offset pointers for A and B
+    A += row * lda;
+    B += col;
 
-    for (int w = 0; w < N; w += block_size)
+    // Iterate over submatrices of A and B
+    for (int k = 0; k < N; k += block_size)
     {
-        if (tx + bx * block_size < N && ty + w < N)
-            block_A(tx, ty) = A(tx, ty);
+        // Load submatrices into shared memory
+        if (row < N && (k + tx) < N)
+            sa(ty, tx) = A[tx];
         else
-            block_A(tx, ty) = 0.0f;
+            sa(ty, tx) = 0.0f;
 
-        if (tx + w < N && ty + by * block_size < N)
-            block_B(tx, ty) = B(tx, ty);
+        if (col < N && (k + ty) < N)
+            sb(ty, tx) = B[ty * ldb];
         else
-            block_B(tx, ty) = 0.0f;
+            sb(ty, tx) = 0.0f;
 
         __syncthreads();
 
-        for (int q = 0; q < block_size; ++q)
+        // Perform the multiplication for this block
+        #pragma unroll
+        for (int p = 0; p < block_size; ++p)
         {
-            sum += block_A(tx, q) * block_B(q, ty);
+            temp += sa(ty, p) * sb(p, tx);
         }
 
         __syncthreads();
-        A += N * block_size;
-        B += block_size;
+
+        // Update A and B pointers
+        A += block_size;
+        B += block_size * ldb;
     }
 
-    if (tx + bx * block_size < N && ty + by * block_size < N)
-        C(tx, ty) = sum;
+    // Write the result to C
+    if (row < N && col < N)
+        C[row * ldc + col] = temp;
 }
 
 float *v8(args arg, float *A, float *B, float *C)
 {
+    int lda = arg.N, ldb = arg.N, ldc = arg.N;
     dim3 threadsPerBlock(arg.block_size, arg.block_size);
-    dim3 numBlocks((arg.N + threadsPerBlock.x - 1) / threadsPerBlock.x, (arg.N + threadsPerBlock.x - 1) / threadsPerBlock.x);
+    dim3 numBlocks((arg.N + arg.block_size - 1) / arg.block_size, 
+                   (arg.N + arg.block_size - 1) / arg.block_size);
+
+    // Shared memory size calculation
     size_t shared_mem_size = 2 * arg.block_size * arg.block_size * sizeof(float);
-    v8_kernel<<<numBlocks, threadsPerBlock, shared_mem_size>>>(arg.N, arg.block_size, A, B, C);
+
+    // Kernel launch
+    v8_kernel<<<numBlocks, threadsPerBlock, shared_mem_size>>>(arg.N, arg.block_size, A, B, C, lda, ldb, ldc);
     cudaDeviceSynchronize();
     return C;
 }
